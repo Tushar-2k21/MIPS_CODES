@@ -1,0 +1,22 @@
+.data
+
+message : .asciiz "ENTER THE VALUE OF PI"
+floatzero : .float 0.0
+.text
+
+lwc1 $f4, floatzero
+
+#To display the message
+li $v0 , 4
+la $a0 , message
+syscall
+
+#to get float as input
+li $v0 , 6
+syscall
+#it will be stored in f0 not in v0
+
+li $v0 , 2
+add.s $f12 , $f0 , $f4
+syscall
+
