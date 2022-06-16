@@ -1,0 +1,52 @@
+.data
+
+newline : .asciiz "\n"
+
+
+.text
+
+ main:
+ 
+ #shows the number 11
+ li $a1 , 11
+ jal shownumber
+ 
+ #function that clears the last bit
+ li $a1 , 11
+ jal clearlastbit
+ 
+ #move the return value to a1 and print it
+ move $a1 , $v0
+ jal shownumber
+ 
+ #end
+ li $v0 , 10
+ syscall
+
+ shownumber:
+ 
+ li $v0 , 4
+ la $a0 , newline
+ syscall
+ 
+ li $v0 , 1
+ move $a0 , $a1
+ syscall
+ 
+ clearlastbit :
+    #$s0 is callee saved so we use it in stack, ask stack for 4bytes 
+    subu $sp , $sp , 4
+    sw $s0 , 0($sp)
+    
+    #load -1 in $s0 and the left shift it by 1 and then take && operation 
+    li $s0 , -1
+    sll $s0 , $s0 , 1
+    and $v0 , $s0 , $a1
+    
+    #return the space ask from stack
+    lw $s0 , ($sp)
+    addi $sp , $sp , 4
+    
+    #return with value in $v0
+    jr $ra
+    
